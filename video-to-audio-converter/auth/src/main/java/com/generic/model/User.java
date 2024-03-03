@@ -14,6 +14,6 @@ import org.springframework.data.annotation.Id;
 public class User {
     @Id
     private Long userId;
-    private String emailId;
+    private String email;
     private String password;
 }

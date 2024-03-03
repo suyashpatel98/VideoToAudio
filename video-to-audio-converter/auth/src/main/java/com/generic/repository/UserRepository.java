@@ -15,6 +15,9 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
     @Query("select * from auth.users where userId = :userId")
     public User getUserById(String userId);
 
+    @Query("select * from auth.users where email = :email")
+    public User getUserByEmail(String email);
+
     @Modifying
     @Query("INSERT INTO auth.users (email, password) VALUES (:email, :password)")
     public int addUser(String email, String password);
