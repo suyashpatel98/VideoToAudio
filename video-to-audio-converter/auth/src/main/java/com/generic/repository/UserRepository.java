@@ -16,6 +16,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
     public User getUserById(String userId);
 
     @Modifying
-    @Query("INSERT INTO auth.users (userId, email, password) VALUES (:userId, :email, :password)")
-    public int addUser(String userId, String email, String password);
+    @Query("INSERT INTO auth.users (email, password) VALUES (:email, :password)")
+    public int addUser(String email, String password);
 }

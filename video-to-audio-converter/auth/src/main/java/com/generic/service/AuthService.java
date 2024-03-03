@@ -4,6 +4,8 @@ import com.generic.model.User;
 import com.generic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -25,11 +27,7 @@ public class AuthService {
         return userRepository.getUserById(userId);
     }
 
-    public int addUser(String email, String password) {
-        String userId = UUID.randomUUID().toString();
-        if(userId.length() > 255) {
-            userId = userId.substring(0, 255);
-        }
-        return userRepository.addUser(userId, email, password);
+    public int addUser(String email, String password) throws DataIntegrityViolationException {
+        return userRepository.addUser(email, password);
     }
 }

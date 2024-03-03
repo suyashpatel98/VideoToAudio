@@ -2,6 +2,7 @@ package com.generic.controller;
 
 import com.generic.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestParam(name = "emailId", required = true) String email,
                                            @RequestParam(name = "password", required = true) String password) {
-        int rowsAffected = authService.addUser(email, password);
+        int rowsAffected = 0;
+        try {
+            rowsAffected = authService.addUser(email, password);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
 
         if (rowsAffected > 0) {
             return ResponseEntity.status(HttpStatus.CREATED)
