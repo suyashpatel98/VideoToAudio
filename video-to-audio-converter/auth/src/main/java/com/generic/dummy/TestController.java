@@ -1,8 +1,9 @@
 package com.generic.dummy;
 
-import com.generic.AuthClient;
+import com.generic.proxy.AuthClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,8 +15,8 @@ public class TestController {
         this.authClient = authClient;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return authClient.returnString();
+    @PostMapping("/test")
+    public ResponseEntity<String> test() {
+        return authClient.register("suyash", "sljfkg");
     }
 }
