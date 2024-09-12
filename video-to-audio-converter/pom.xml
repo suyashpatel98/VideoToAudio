@@ -17,6 +17,7 @@
 	<modules>
 		<module>auth</module>
 		<module>common</module>
+		<module>upload</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
