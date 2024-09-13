@@ -19,9 +19,16 @@ public class UploadController {
     KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public UploadController(AuthClient authClient, S3Service s3Service) {
+    public UploadController(AuthClient authClient, S3Service s3Service, KafkaProducerService kafkaProducerService) {
         this.authClient = authClient;
         this.s3Service = s3Service;
+        this.kafkaProducerService = kafkaProducerService;
+    }
+
+    @PostMapping("/test")
+    public void test() {
+        boolean result = kafkaProducerService.publishMessage("email", "videoKey", "requestId");
+        System.out.println(result);
     }
 
     @PostMapping("/upload")
