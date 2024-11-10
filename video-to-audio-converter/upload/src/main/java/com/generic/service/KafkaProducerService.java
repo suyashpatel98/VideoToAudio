@@ -1,16 +1,22 @@
 package com.generic.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.generic.config.Message;
+import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.producer.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
-@Component
+@Service
 public class KafkaProducerService {
     private KafkaProducer<String, String> producer;
     private String topic;
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public KafkaProducerService(
             @Value("${kafka.bootstrap-servers}") String bootstrapServers,
@@ -33,8 +39,9 @@ public class KafkaProducerService {
 
     public boolean publishMessage(String email, String videoKey, String requestId) {
         try {
-            String message = String.format("{\"email\": \"%s\", \"videoKey\": \"%s\", \"requestId\": \"%s\"}", email, videoKey, requestId);
-            ProducerRecord<String, String> record = new ProducerRecord<>(topic, email, message);
+            Message message = new Message(email, videoKey, requestId);
+            String messageJson = objectMapper.writeValueAsString(message);
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, email, messageJson);
 
             producer.send(record, new Callback() {
                 @Override

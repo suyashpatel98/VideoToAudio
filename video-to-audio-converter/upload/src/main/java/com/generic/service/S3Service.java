@@ -24,13 +24,20 @@ public class S3Service {
                 .region(Region.US_EAST_2)
                 .credentialsProvider(credentialsProvider)
                 .build();
+
     }
     public String uploadVideo(String email, MultipartFile videoFile) throws IOException {
-        String key = videoFile.getName();
+        String key = videoFile.getOriginalFilename();
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME).key(key).build();
 
         s3Client.putObject(request, RequestBody.fromBytes(videoFile.getBytes()));
+        /**
+         * // Stream the file directly to S3
+         *     try (InputStream videoStream = videoFile.getInputStream()) {
+         *         s3Client.putObject(request, RequestBody.fromInputStream(videoStream, videoFile.getSize()));
+         *     }
+         */
         return key;
     }
 }

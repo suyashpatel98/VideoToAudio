@@ -35,10 +35,10 @@ public class UploadController {
     public ResponseEntity<String> upload(@RequestHeader(name = "Authorization") String tokenHeader,
                                          @RequestParam(name = "email") String email,
                                          @RequestPart(name = "file") MultipartFile videoFile) {
-        if(!authClient.validateToken(tokenHeader).getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid token");
-        }
+//        if(!authClient.validateToken(tokenHeader).getStatusCode().isSameCodeAs(HttpStatus.OK)) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body("Invalid token");
+//        }
         String requestId = UUID.randomUUID().toString();
         String videoKey = null;
         try {
@@ -46,7 +46,7 @@ public class UploadController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //kafkaProducerService.publishMessage(email, videoKey, requestId);
+        kafkaProducerService.publishMessage(email, videoKey, requestId);
         return ResponseEntity.status(HttpStatus.CREATED).body(requestId);
     }
 
